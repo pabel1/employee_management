@@ -25,7 +25,7 @@ router.post(
 //   validateRequest(JoiValidationSchema.refreshTokenJoiSchema),
 //   userController.refreshToken
 // );
-// router.post("/logout", userController.logout);
+router.post("/logout", userController.logout);
 
 const userRouter = router;
 
