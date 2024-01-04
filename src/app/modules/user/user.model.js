@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["Administrator", "Supervisor", "Employee"],
-      required: true,
+      default: "Employee",
     },
     photo: {
       public_id: {

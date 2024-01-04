@@ -13,11 +13,11 @@ router.post(
   validateRequest(JoiUserValidationSchema.userCreateJoiValidationSchema),
   userController.userRegistration
 );
-// router.post(
-//   "/login",
-//   validateRequest(JoiValidationSchema.loginSchema),
-//   userController.userLogin
-// );
+router.post(
+  "/login",
+  validateRequest(JoiUserValidationSchema.loginSchema),
+  userController.userLogin
+);
 // router.get("/logged-in-user", authVerification, userController.loggedInUser);
 
 // router.post(

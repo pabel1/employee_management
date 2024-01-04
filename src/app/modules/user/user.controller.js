@@ -9,8 +9,8 @@ const userRegistration = catchAsyncError(async (req, res) => {
 
   if (file) {
     let photo = {
-      secure_url: file?.secure_url,
-      public_id: file?.public_id,
+      url: file?.path,
+      public_id: file?.filename,
     };
     req.body.photo = photo;
   }
@@ -65,7 +65,7 @@ const userLogin = catchAsyncError(async (req, res) => {
 });
 
 const loggedInUser = catchAsyncError(async (req, res) => {
-  const result = await userServices.loggedInUserFromDB(req.user._id);
+  const result = await userServices.loginUserInToDB(req.user._id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -38,12 +38,10 @@ const loginUserInToDB = async (payload) => {
     email,
   });
 
-  const { _id } = isExistUser;
-
   if (!isExistUser) {
     throw new ErrorHandler("User does not exist", httpStatus.NOT_FOUND);
   }
-
+  const { _id } = isExistUser;
   const isMatchPassword = async () => {
     return await bcrypt.compare(password, isExistUser?.password);
   };

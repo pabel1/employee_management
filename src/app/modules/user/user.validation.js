@@ -7,7 +7,7 @@ const userCreateJoiValidationSchema = Joi.object({
   password: Joi.string().required().label("Password"),
   role: Joi.string()
     .valid("Administrator", "Supervisor", "Employee")
-    .required()
+
     .label("Role"),
   photo: Joi.object({
     public_id: Joi.string(),
