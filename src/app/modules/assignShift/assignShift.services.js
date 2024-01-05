@@ -17,9 +17,12 @@ const createAssignShiftIntoDB = async (payload) => {
       },
     },
   ]);
+  console.log(isExist);
   if (isExist.length) {
     throw new ErrorHandler(
-      `${isExist[0].shiftName} this Shift already Assigned for this Employee!`,
+      `${
+        isExist[0]?.shiftName ? isExist[0]?.shiftName : isExist[0].shiftID
+      } this Shift already Assigned for this Employee!`,
       httpStatus.CONFLICT
     );
   }
