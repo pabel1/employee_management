@@ -1,10 +1,11 @@
 const httpStatus = require("http-status");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UserModel = require("./user.model");
+
 const ErrorHandler = require("../../../ErrorHandler/errorHandler");
 const jwtHandle = require("../../../shared/createToken");
 const config = require("../../../config/config");
+const UserModel = require("./user.model");
 const createUserInToDB = async (payload) => {
   const user = await UserModel.findOne({ email: payload?.email });
   if (user) {

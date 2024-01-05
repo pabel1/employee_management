@@ -17,6 +17,7 @@ const authVerification = async (req, res, next) => {
 
       token = authorization?.split(" ")[1];
     }
+    console.log(token);
     if (!token) {
       throw new ErrorHandler("Please login to access the resource", 401);
     }
@@ -94,7 +95,7 @@ const authVerification = async (req, res, next) => {
         throw error;
       }
     }
-    // Continue with the next middleware
+
     next();
   } catch (error) {
     next(error, httpStatus.UNAUTHORIZED);
