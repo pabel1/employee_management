@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const {
+  compositeKeyGenerator,
+} = require("../../../Helper/compositeKeyGenerator");
 
 const shiftSchema = new mongoose.Schema(
   {
@@ -18,9 +21,23 @@ const shiftSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    compositeKey: {
+      type: String,
+      unique: true,
+    },
   },
   { timestamps: true, versionKey: false }
 );
+
+// composite key created for uniqueness
+shiftSchema.pre("save", function (next) {
+  this.compositeKey = compositeKeyGenerator.generateCompositKey({
+    keyFor: "shift",
+    firstField: this.shiftName,
+    secondField: this.startTime,
+  });
+  next();
+});
 
 const ShiftModel = mongoose.model("Shift", shiftSchema);
 
