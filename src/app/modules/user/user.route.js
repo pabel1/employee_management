@@ -5,6 +5,7 @@ const validateRequest = require("../../../Middleware/validateRequest");
 const JoiUserValidationSchema = require("./user.validation");
 const { UploadImageCloudinary } = require("../../../Middleware/upload");
 const userController = require("./user.controller");
+const authVerification = require("../../../Middleware/authVarification");
 const router = express.Router();
 
 router.post(
@@ -18,7 +19,7 @@ router.post(
   validateRequest(JoiUserValidationSchema.loginSchema),
   userController.userLogin
 );
-// router.get("/logged-in-user", authVerification, userController.loggedInUser);
+router.get("/logged-in-user", authVerification, userController.loggedInUser);
 
 // router.post(
 //   "/refresh-token",

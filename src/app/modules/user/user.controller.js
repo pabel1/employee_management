@@ -65,7 +65,6 @@ const userLogin = catchAsyncError(async (req, res) => {
 
 const loggedInUser = catchAsyncError(async (req, res) => {
   const result = await userServices.loginUserInToDB(req.user._id);
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
