@@ -98,6 +98,7 @@ const refreshToken = catchAsyncError(async (req, res) => {
     },
   });
 });
+
 // logout
 const logout = catchAsyncError(async (req, res) => {
   res.clearCookie("accessToken");
@@ -110,11 +111,26 @@ const logout = catchAsyncError(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsyncError(async (req, res) => {
+  const { id } = req.params;
+  const result = await userServices.deleteUserFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Logged out successfully",
+    data: {
+      result,
+    },
+  });
+});
+
 const userController = {
   userRegistration,
   userLogin,
   loggedInUser,
   refreshToken,
   logout,
+  deleteUser,
 };
 module.exports = userController;

@@ -104,12 +104,23 @@ const loggedInUserFromDB = async (userID) => {
     user,
   };
 };
+const deleteUserFromDB = async (userID) => {
+  const user = await UserModel.findById(userID);
+  if (!user) {
+    throw new ErrorHandler("User not found", httpStatus.NOT_FOUND);
+  }
+  const result = await UserModel.deleteOne({ _id: userID });
+  return {
+    result,
+  };
+};
 
 const userServices = {
   createUserInToDB,
   loginUserInToDB,
   loggedInUserFromDB,
   refreshTokenFromDB,
+  deleteUserFromDB,
 };
 
 module.exports = userServices;

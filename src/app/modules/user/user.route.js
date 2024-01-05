@@ -6,6 +6,7 @@ const JoiUserValidationSchema = require("./user.validation");
 const { UploadImageCloudinary } = require("../../../Middleware/upload");
 const userController = require("./user.controller");
 const authVerification = require("../../../Middleware/authVarification");
+const { authorizeRoles } = require("../../../Middleware/roleMiddleware");
 const router = express.Router();
 
 router.post(
@@ -28,6 +29,12 @@ router.get("/logged-in-user", authVerification, userController.loggedInUser);
 // );
 router.post("/logout", userController.logout);
 
+router.delete(
+  "/delete-user/:id",
+  authVerification,
+  authorizeRoles("Administrator"),
+  userController.deleteUser
+);
 const userRouter = router;
 
 module.exports = userRouter;
