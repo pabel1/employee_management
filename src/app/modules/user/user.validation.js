@@ -43,10 +43,43 @@ const refreshTokenJoiSchema = Joi.object({
   }),
 });
 
+const updateUserJoiSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": "Please enter your name",
+  }),
+  email: Joi.string().email().required().messages({
+    "string.email": "Invalid email",
+    "any.required": "Please enter your email",
+  }),
+  phone: Joi.string().length(11).required().messages({
+    "string.length": "Phone number must be 11 digits",
+    "any.required": "Please enter your phone number",
+  }),
+  password: Joi.string().required().messages({
+    "any.required": "Please enter your password",
+  }),
+  role: Joi.string()
+    .valid("Administrator", "Supervisor", "Employee")
+    .default("Employee"),
+  photo: Joi.object({
+    public_id: Joi.string(),
+    url: Joi.string(),
+  }),
+  gender: Joi.string().valid("Male", "Female", "Others"),
+  userStatus: Joi.string()
+    .valid("Active", "Block", "Restricted")
+    .default("Active"),
+}).when(Joi.object({ role: "Administrator" }).unknown(), {
+  then: Joi.object({
+    role: Joi.string().valid("Administrator").required(),
+  }),
+});
+
 const JoiUserValidationSchema = {
   userCreateJoiValidationSchema,
   loginSchema,
   refreshTokenJoiSchema,
+  updateUserJoiSchema,
 };
 
 module.exports = JoiUserValidationSchema;

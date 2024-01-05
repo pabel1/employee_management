@@ -111,6 +111,31 @@ const logout = catchAsyncError(async (req, res) => {
   });
 });
 
+const updateMyProfile = catchAsyncError(async (req, res) => {
+  const result = await userServices.updateLoginUserIntoDB(req);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "update my Profile  successfully",
+    data: {
+      result,
+    },
+  });
+});
+const updateUser = catchAsyncError(async (req, res) => {
+  const result = await userServices.updateUserIntoDB(req);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Update user  successfully",
+    data: {
+      result,
+    },
+  });
+});
+
 const deleteUser = catchAsyncError(async (req, res) => {
   const { id } = req.params;
   const result = await userServices.deleteUserFromDB(id);
@@ -132,5 +157,7 @@ const userController = {
   refreshToken,
   logout,
   deleteUser,
+  updateUser,
+  updateMyProfile,
 };
 module.exports = userController;

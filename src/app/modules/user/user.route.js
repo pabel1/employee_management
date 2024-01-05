@@ -35,6 +35,17 @@ router.delete(
   authorizeRoles("Administrator"),
   userController.deleteUser
 );
+router.patch(
+  "/update-my-profile",
+  authVerification,
+  userController.updateMyProfile
+);
+router.patch(
+  "/update-user/:id",
+  authVerification,
+  authorizeRoles("Administrator", "Supervisor"),
+  userController.updateUser
+);
 const userRouter = router;
 
 module.exports = userRouter;

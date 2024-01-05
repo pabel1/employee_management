@@ -114,13 +114,50 @@ const deleteUserFromDB = async (userID) => {
     result,
   };
 };
+const updateUserIntoDB = async (req) => {
+  const user = await UserModel.findById(req.params.id);
+  if (!user) {
+    throw new ErrorHandler("User not found", httpStatus.NOT_FOUND);
+  }
+  const { role } = req.user;
+  if (role === "Administrator") {
+    Object.assign(user, req.body);
+  } else if (role === "Supervisor") {
+    user.userStatus = req.body.userStatus;
+  }
+  const result = await user.save();
+  return {
+    result,
+  };
+};
 
+const updateLoginUserIntoDB = async (req) => {
+  const user = await UserModel.findById(req.userId);
+  if (!user) {
+    throw new ErrorHandler("User not found", httpStatus.NOT_FOUND);
+  }
+
+  if (req.body.role) {
+    throw new ErrorHandler("role cannot updatable", httpStatus.BAD_REQUEST);
+  }
+
+  const result = await UserModel.updateOne(
+    { _id: user?._id },
+    { $set: req.body },
+    { new: true }
+  );
+  return {
+    result,
+  };
+};
 const userServices = {
   createUserInToDB,
   loginUserInToDB,
   loggedInUserFromDB,
   refreshTokenFromDB,
   deleteUserFromDB,
+  updateLoginUserIntoDB,
+  updateUserIntoDB,
 };
 
 module.exports = userServices;
