@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../ErrorHandler/errorHandler");
-const UserModel = require("../app/modules/Auth/users/user.model");
+
 const httpStatus = require("http-status");
 const config = require("../config/config");
 const jwtHandle = require("../shared/createToken");
+const UserModel = require("../app/modules/user/user.model");
 
 const authVerification = async (req, res, next) => {
   try {
