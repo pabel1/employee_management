@@ -3,6 +3,9 @@ const catchAsyncError = require("../../../ErrorHandler/catchAsyncError");
 const config = require("../../../config/config");
 const sendResponse = require("../../../shared/sendResponse");
 const userServices = require("./user.services");
+const pick = require("../../../shared/pick");
+const userConstant = require("./user.constant");
+const paginationFields = require("../../../constant/pagination");
 
 const userRegistration = catchAsyncError(async (req, res) => {
   const file = req.file;
@@ -150,6 +153,23 @@ const deleteUser = catchAsyncError(async (req, res) => {
   });
 });
 
+const getAllUser = catchAsyncError(async (req, res) => {
+  const filters = pick(req.query, userConstant.userFilterableFields);
+  const paginationOptions = pick(req.query, paginationFields);
+  const result = await userServices.getAllUserFromDB(
+    filters,
+    paginationOptions
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Get successfully",
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
 const userController = {
   userRegistration,
   userLogin,
@@ -159,5 +179,6 @@ const userController = {
   deleteUser,
   updateUser,
   updateMyProfile,
+  getAllUser,
 };
 module.exports = userController;

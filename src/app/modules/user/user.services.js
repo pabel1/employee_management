@@ -6,6 +6,11 @@ const ErrorHandler = require("../../../ErrorHandler/errorHandler");
 const jwtHandle = require("../../../shared/createToken");
 const config = require("../../../config/config");
 const UserModel = require("./user.model");
+const { paginationHelpers } = require("../../../Helper/paginationHelper");
+const { searchHelper } = require("../../../Helper/searchHelper");
+const userConstant = require("./user.constant");
+const { filteringHelper } = require("../../../Helper/filteringHelper");
+const { sortingHelper } = require("../../../Helper/sortingHelper");
 const createUserInToDB = async (payload) => {
   const user = await UserModel.findOne({ email: payload?.email });
   if (user) {
@@ -150,6 +155,71 @@ const updateLoginUserIntoDB = async (req) => {
     result,
   };
 };
+
+const getAllUserFromDB = async (filters, paginationOptions) => {
+  const { searchTerm, ...filtersData } = filters;
+  console.log("filtersData", filtersData);
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions);
+
+  const pipeline = [];
+  const totalPipeline = [{ $count: "count" }];
+  const match = {};
+
+  //?Dynamic search added
+  const dynamicSearchQuery = searchHelper.createSearchQuery(
+    searchTerm,
+    userConstant.userSearchableFields
+  );
+
+  if (dynamicSearchQuery && dynamicSearchQuery.length) {
+    match.$or = dynamicSearchQuery;
+  }
+  // ? Dynamic filtering added
+  const dynamicFilter = filteringHelper.createDynamicFilter(filtersData);
+  if (dynamicFilter && dynamicFilter.length) {
+    match.$and = dynamicFilter;
+  }
+  console.log(dynamicFilter);
+  // if join projection and otherneeded for before match ar unshift then write here
+
+  if (skip) {
+    pipeline.push({ $skip: skip });
+  }
+
+  if (limit) {
+    pipeline.push({ $limit: limit });
+  }
+
+  // sorting
+  const dynamicSorting = sortingHelper.createDynamicSorting(sortBy, sortOrder);
+
+  if (dynamicSorting) {
+    pipeline.push({
+      $sort: dynamicSorting,
+    });
+  }
+
+  if (Object.keys(match).length) {
+    pipeline.unshift({
+      $match: match,
+    });
+    totalPipeline.unshift({
+      $match: match,
+    });
+  }
+
+  const result = await UserModel.aggregate(pipeline);
+  const total = await UserModel.aggregate(totalPipeline);
+  return {
+    meta: {
+      page,
+      limit,
+      total: total[0]?.count,
+    },
+    data: result,
+  };
+};
 const userServices = {
   createUserInToDB,
   loginUserInToDB,
@@ -158,6 +228,7 @@ const userServices = {
   deleteUserFromDB,
   updateLoginUserIntoDB,
   updateUserIntoDB,
+  getAllUserFromDB,
 };
 
 module.exports = userServices;
