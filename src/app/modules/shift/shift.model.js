@@ -14,11 +14,11 @@ const shiftSchema = new mongoose.Schema(
       type: Date,
     },
     startTime: {
-      type: Date,
+      type: String,
       required: true,
     },
     endTime: {
-      type: Date,
+      type: String,
       required: true,
     },
     compositeKey: {

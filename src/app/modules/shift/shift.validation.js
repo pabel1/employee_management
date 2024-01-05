@@ -3,8 +3,8 @@ const Joi = require("joi");
 const shiftCreateValidationSchema = Joi.object({
   shiftName: Joi.string().valid("Day", "Night").required().label("Shift Name"),
   date: Joi.date().label("Date"),
-  startTime: Joi.date().required().label("Start Time"),
-  endTime: Joi.date().required().label("End Time"),
+  startTime: Joi.string().required().label("Start Time"),
+  endTime: Joi.string().required().label("End Time"),
 });
 
 const JoiShiftValidationSchema = {
