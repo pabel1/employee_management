@@ -6,23 +6,17 @@ const createSearchQuery = (searchTerm, searchableFields) => {
       $options: "i",
     };
 
-    const searchQuery = {
-      $or: searchableFields.map((field) => ({
-        [field]: searchRegex,
-      })),
-    };
+    const searchQuery = searchableFields.map((field) => ({
+      [field]: searchRegex,
+    }));
+
     return searchQuery;
   } else {
     // Return an empty query if searchTerm is not provided
-    return {};
+    return [];
   }
 };
 
 exports.searchHelper = {
   createSearchQuery,
 };
-// Demo call for users
-//   const userSearchableFields = ['name', 'email', 'username'];
-//   const userSearchTerm = 'userSearchTermHere';
-//   const userQuery = createSearchQuery(userSearchTerm, userSearchableFields);
-//   console.log(userQuery, 'searchQuery');

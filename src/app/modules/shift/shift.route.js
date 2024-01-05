@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post(
   "/create",
-
   validateRequest(JoiShiftValidationSchema.shiftCreateValidationSchema),
   shiftController.shiftCreate
 );
+router.get("/get-all", shiftController.getAllShift);
 
 const shiftRouter = router;
 
