@@ -6,10 +6,14 @@ const userServices = require("./user.services");
 const pick = require("../../../shared/pick");
 const userConstant = require("./user.constant");
 const paginationFields = require("../../../constant/pagination");
+const JoiUserValidationSchema = require("./user.validation");
+const ErrorHandler = require("../../../ErrorHandler/errorHandler");
+const { child } = require("winston");
 
 const userRegistration = catchAsyncError(async (req, res) => {
   const file = req.file;
 
+  console.log(file);
   if (file) {
     let photo = {
       url: file?.path,
@@ -18,6 +22,20 @@ const userRegistration = catchAsyncError(async (req, res) => {
     req.body.photo = photo;
   }
 
+  let payload = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    password: req.body.password,
+    photo: req.body.photo,
+  };
+  console.log(req.body);
+  const { error } =
+    JoiUserValidationSchema.userCreateJoiValidationSchema.validate(payload);
+
+  if (error) {
+    throw new ErrorHandler(error, httpStatus.BAD_GATEWAY);
+  }
   const result = await userServices.createUserInToDB(req.body);
   const { refreshToken, accessToken, userData } = result;
 

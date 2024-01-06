@@ -12,7 +12,6 @@ const router = express.Router();
 router.post(
   "/create",
   UploadImageCloudinary.single("user_image"),
-  validateRequest(JoiUserValidationSchema.userCreateJoiValidationSchema),
   userController.userRegistration
 );
 router.post(
