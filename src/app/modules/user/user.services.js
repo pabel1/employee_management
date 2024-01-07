@@ -48,9 +48,7 @@ const loginUserInToDB = async (payload) => {
     throw new ErrorHandler("User does not exist", httpStatus.NOT_FOUND);
   }
   const { _id } = isExistUser;
-  const isMatchPassword = async () => {
-    return await bcrypt.compare(password, isExistUser?.password);
-  };
+  const isMatchPassword = await bcrypt.compare(password, isExistUser?.password);
 
   if (!isMatchPassword) {
     throw new ErrorHandler("Invalid credentials", httpStatus.UNAUTHORIZED);
