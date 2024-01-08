@@ -11,8 +11,10 @@ const router = express.Router();
 
 router.post(
   "/create",
+  authVerification,
+  authorizeRoles("Administrator", "Supervisor"),
   UploadImageCloudinary.single("user_image"),
-  userController.userRegistration
+  userController.userCreate
 );
 router.post(
   "/login",
@@ -21,11 +23,11 @@ router.post(
 );
 router.get("/logged-in-user", authVerification, userController.loggedInUser);
 
-// router.post(
-//   "/refresh-token",
-//   validateRequest(JoiValidationSchema.refreshTokenJoiSchema),
-//   userController.refreshToken
-// );
+router.post(
+  "/refresh-token",
+  validateRequest(JoiUserValidationSchema.refreshTokenJoiSchema),
+  userController.refreshToken
+);
 router.post("/logout", userController.logout);
 
 router.delete(

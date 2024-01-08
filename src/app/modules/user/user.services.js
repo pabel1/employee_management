@@ -19,23 +19,7 @@ const createUserInToDB = async (payload) => {
   const newUser = new UserModel(payload);
   const userData = await newUser.save();
 
-  let accessToken, refreshToken;
-  if (userData) {
-    accessToken = await jwtHandle(
-      { id: userData?._id, email: userData?.email },
-      config.jwt_key,
-      config.jwt_token_expire
-    );
-
-    refreshToken = await jwtHandle(
-      { id: userData?._id, email: userData?.email },
-      config.jwt_refresh_key,
-      config.jwt_refresh_token_expire
-    );
-  }
-  console.log(refreshToken);
-  console.log(accessToken);
-  return { userData, accessToken, refreshToken };
+  return userData;
 };
 const loginUserInToDB = async (payload) => {
   const { email, password } = payload;
@@ -92,6 +76,7 @@ const refreshTokenFromDB = async (token) => {
 
     return {
       accessToken,
+      user: isUserExist,
     };
   } catch (error) {
     throw new ErrorHandler("Invalid Refresh Token", httpStatus.FORBIDDEN);

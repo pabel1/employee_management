@@ -8,9 +8,8 @@ const userConstant = require("./user.constant");
 const paginationFields = require("../../../constant/pagination");
 const JoiUserValidationSchema = require("./user.validation");
 const ErrorHandler = require("../../../ErrorHandler/errorHandler");
-const { child } = require("winston");
 
-const userRegistration = catchAsyncError(async (req, res) => {
+const userCreate = catchAsyncError(async (req, res) => {
   const file = req.file;
 
   console.log(file);
@@ -37,25 +36,13 @@ const userRegistration = catchAsyncError(async (req, res) => {
     throw new ErrorHandler(error, httpStatus.BAD_GATEWAY);
   }
   const result = await userServices.createUserInToDB(req.body);
-  const { refreshToken, accessToken, userData } = result;
-
-  if (refreshToken && accessToken && userData) {
-    let cookieOptions = {
-      secure: config.env === "production",
-      httpOnly: true,
-    };
-
-    res.cookie("refreshToken", refreshToken, cookieOptions);
-    res.cookie("accessToken", accessToken, cookieOptions);
-  }
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
     message: "User created successfully",
     data: {
-      userData,
-      accessToken,
+      result,
     },
   });
 });
@@ -86,6 +73,7 @@ const userLogin = catchAsyncError(async (req, res) => {
 
 const loggedInUser = catchAsyncError(async (req, res) => {
   const result = await userServices.loggedInUserFromDB(req.user._id);
+  console.log(result);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -189,7 +177,7 @@ const getAllUser = catchAsyncError(async (req, res) => {
 });
 
 const userController = {
-  userRegistration,
+  userCreate,
   userLogin,
   loggedInUser,
   refreshToken,
