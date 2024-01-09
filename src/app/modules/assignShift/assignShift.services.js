@@ -72,6 +72,7 @@ const assignShiftEmployeeFromDB = async (id) => {
     },
     {
       $project: {
+        "Shift._id": 1,
         "Shift.shiftName": 1,
         "Shift.date": 1,
         "Shift.startTime": 1,
@@ -97,9 +98,62 @@ const removeShiftEmployeeFromDB = async (shiftID) => {
   };
 };
 
+// logged Employee shift
+const loggedInEmployeeShiftFromDB = async (id) => {
+  const object = new mongoose.Types.ObjectId(id);
+
+  console.log(object);
+  const shifts = await AssignShiftModel.aggregate([
+    {
+      $match: {
+        $and: [{ assignEmployee: object }],
+      },
+    },
+    {
+      $lookup: {
+        from: "shifts",
+        localField: "shiftID",
+        foreignField: "_id",
+        as: "Shift",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "assignEmployee",
+        foreignField: "_id",
+        as: "Employee",
+      },
+    },
+    {
+      $unwind: {
+        path: "$Shift",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: "$Employee",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        _id: "$Shift._id",
+        shiftName: "$Shift.shiftName",
+        date: 1,
+        startTime: "$Shift.startTime",
+        endTime: "$Shift.endTime",
+      },
+    },
+  ]);
+
+  return shifts;
+};
 const assignShiftServices = {
   createAssignShiftIntoDB,
   assignShiftEmployeeFromDB,
   removeShiftEmployeeFromDB,
+  loggedInEmployeeShiftFromDB,
 };
 module.exports = assignShiftServices;

@@ -27,10 +27,11 @@ const authVerification = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, config.jwt_key);
       const { email, userId } = decoded;
+      console.log("userId:", userId);
       req.email = email;
 
-      const rootUser = await UserModel.findOne({ email: email });
-
+      const rootUser = await UserModel.findById(userId);
+      console.log("rootUser:", rootUser);
       if (!rootUser) {
         throw new ErrorHandler("User not found", 404);
       }

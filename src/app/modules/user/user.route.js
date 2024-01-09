@@ -47,7 +47,7 @@ router.patch(
   authorizeRoles("Administrator", "Supervisor"),
   userController.updateUser
 );
-router.get("/get-all-user", authVerification, userController.getAllUser);
+router.get("/get-all-user", userController.getAllUser);
 
 const userRouter = router;
 

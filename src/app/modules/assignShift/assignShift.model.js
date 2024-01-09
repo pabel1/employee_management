@@ -7,7 +7,7 @@ const assignShiftSchema = new mongoose.Schema(
       required: true,
     },
     shiftName: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
     },
 
     date: {

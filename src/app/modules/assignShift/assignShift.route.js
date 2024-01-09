@@ -30,6 +30,11 @@ router.delete(
   authorizeRoles("Administrator", "Supervisor"),
   assignShiftController.removeEmployeeShift
 );
+router.get(
+  "/my-shift",
+  authVerification,
+  assignShiftController.loggedInEmployeeShift
+);
 
 const assignShiftRouter = router;
 
