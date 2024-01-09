@@ -32,8 +32,74 @@ const createAssignShiftIntoDB = async (payload) => {
 
   return newShift;
 };
+const assignShiftEmployeeFromDB = async (id) => {
+  const object = new mongoose.Types.ObjectId(id);
+
+  console.log(object);
+  const shifts = await AssignShiftModel.aggregate([
+    {
+      $match: {
+        $and: [{ shiftID: object }],
+      },
+    },
+    {
+      $lookup: {
+        from: "shifts",
+        localField: "shiftID",
+        foreignField: "_id",
+        as: "Shift",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "assignEmployee",
+        foreignField: "_id",
+        as: "Employee",
+      },
+    },
+    {
+      $unwind: {
+        path: "$Shift",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: {
+        path: "$Employee",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        "Shift.shiftName": 1,
+        "Shift.date": 1,
+        "Shift.startTime": 1,
+        "Shift.endTime": 1,
+        "Employee._id": 1,
+        "Employee.photo": 1,
+        "Employee.name": 1,
+        "Employee.email": 1,
+      },
+    },
+  ]);
+
+  return shifts;
+};
+const removeShiftEmployeeFromDB = async (shiftID) => {
+  const shift = await AssignShiftModel.findById(shiftID);
+  if (!shift) {
+    throw new ErrorHandler("Shift not found", httpStatus.NOT_FOUND);
+  }
+  const result = await AssignShiftModel.deleteOne({ _id: shiftID });
+  return {
+    result,
+  };
+};
 
 const assignShiftServices = {
   createAssignShiftIntoDB,
+  assignShiftEmployeeFromDB,
+  removeShiftEmployeeFromDB,
 };
 module.exports = assignShiftServices;

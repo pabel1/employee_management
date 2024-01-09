@@ -15,7 +15,36 @@ const assignShiftCreate = catchAsyncError(async (req, res) => {
   });
 });
 
+const assignShiftEmployee = catchAsyncError(async (req, res) => {
+  const result = await assignShiftServices.assignShiftEmployeeFromDB(
+    req.params
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: " Assign Shift get successfully",
+    data: {
+      result,
+    },
+  });
+});
+const removeEmployeeShift = catchAsyncError(async (req, res) => {
+  const result = await assignShiftServices.removeShiftEmployeeFromDB(
+    req.params
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Remove Assign Shift  successfully",
+    data: {
+      result,
+    },
+  });
+});
+
 const assignShiftController = {
   assignShiftCreate,
+  assignShiftEmployee,
+  removeEmployeeShift,
 };
 module.exports = assignShiftController;
