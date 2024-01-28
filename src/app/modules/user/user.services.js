@@ -155,7 +155,6 @@ const getAllUserFromDB = async (filters, paginationOptions) => {
   if (dynamicSearchQuery && dynamicSearchQuery.length) {
     match.$or = dynamicSearchQuery;
   }
-  // ? Dynamic filtering added
   const dynamicFilter = filteringHelper.createDynamicFilter(filtersData);
   if (dynamicFilter && dynamicFilter.length) {
     match.$and = dynamicFilter;
