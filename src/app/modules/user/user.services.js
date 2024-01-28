@@ -147,7 +147,6 @@ const getAllUserFromDB = async (filters, paginationOptions) => {
   const totalPipeline = [{ $count: "count" }];
   const match = {};
 
-  //?Dynamic search added
   const dynamicSearchQuery = searchHelper.createSearchQuery(
     searchTerm,
     userConstant.userSearchableFields
