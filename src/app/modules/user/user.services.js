@@ -160,7 +160,6 @@ const getAllUserFromDB = async (filters, paginationOptions) => {
     match.$and = dynamicFilter;
   }
   console.log(dynamicFilter);
-  // if join projection and otherneeded for before match ar unshift then write here
 
   if (skip) {
     pipeline.push({ $skip: skip });
