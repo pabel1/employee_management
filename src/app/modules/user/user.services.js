@@ -159,7 +159,6 @@ const getAllUserFromDB = async (filters, paginationOptions) => {
   if (dynamicFilter && dynamicFilter.length) {
     match.$and = dynamicFilter;
   }
-  console.log(dynamicFilter);
 
   if (skip) {
     pipeline.push({ $skip: skip });
