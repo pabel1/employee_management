@@ -27,7 +27,6 @@ const userCreate = catchAsyncError(async (req, res) => {
     password: req.body.password,
     photo: req.body.photo,
   };
-  console.log(req.body);
   const { error } =
     JoiUserValidationSchema.userCreateJoiValidationSchema.validate(payload);
 
