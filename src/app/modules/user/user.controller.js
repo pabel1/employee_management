@@ -86,7 +86,6 @@ const refreshToken = catchAsyncError(async (req, res) => {
   const { refreshToken } = req.cookies;
 
   const result = await userServices.refreshTokenFromDB(refreshToken);
-  console.log(result);
   // set refresh token into cookie
   const cookieOptions = {
     secure: config.env === "production",
