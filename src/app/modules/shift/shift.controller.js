@@ -35,8 +35,24 @@ const getAllShift = catchAsyncError(async (req, res) => {
     data: result.data,
   });
 });
+
+const deleteShift = catchAsyncError(async (req, res) => {
+  const { id } = req.params;
+  const result = await shiftServices.deleteShiftFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Shift Delete  successfully",
+    data: {
+      result,
+    },
+  });
+});
+
 const shiftController = {
   shiftCreate,
   getAllShift,
+  deleteShift,
 };
 module.exports = shiftController;

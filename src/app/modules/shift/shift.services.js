@@ -98,8 +98,19 @@ const getAllShiftFromDB = async (filters, paginationOptions) => {
   };
 };
 
+const deleteShiftFromDB = async (id) => {
+  const shift = await ShiftModel.findById(id);
+  if (!shift) {
+    throw new ErrorHandler("Shift not found", httpStatus.NOT_FOUND);
+  }
+  const result = await ShiftModel.deleteOne({ _id: id });
+  return {
+    result,
+  };
+};
 const shiftServices = {
   createShiftIntoDB,
   getAllShiftFromDB,
+  deleteShiftFromDB,
 };
 module.exports = shiftServices;

@@ -12,7 +12,6 @@ const ErrorHandler = require("../../../ErrorHandler/errorHandler");
 const userCreate = catchAsyncError(async (req, res) => {
   const file = req.file;
 
-  console.log(file);
   if (file) {
     let photo = {
       url: file?.path,

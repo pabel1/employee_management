@@ -16,6 +16,7 @@ router.post(
   shiftController.shiftCreate
 );
 router.get("/get-all", shiftController.getAllShift);
+router.delete("/delete/:id", shiftController.deleteShift);
 
 const shiftRouter = router;
 

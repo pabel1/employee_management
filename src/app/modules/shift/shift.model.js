@@ -7,7 +7,7 @@ const shiftSchema = new mongoose.Schema(
   {
     shiftName: {
       type: String,
-      enum: ["Day", "Night"],
+      enum: ["Day", "Night", "Morning"],
     },
 
     date: {
